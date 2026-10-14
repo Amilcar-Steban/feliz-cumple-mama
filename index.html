@@ -1,0 +1,305 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Feliz cumpleaños, Mamá</title>
+  <meta name="description" content="Un regalo hecho con todo mi amor." />
+  <meta name="theme-color" content="#FCEEF2" />
+  <meta property="og:title" content="🎁 Feliz cumpleaños, Mamá" />
+  <meta property="og:description" content="Tengo un regalo para ti. Ábrelo 💕" />
+  <meta property="og:image" content="logo.png" />
+  <link rel="icon" href="logo.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cinzel:wght@600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pink: #DF758E;
+      --pink-deep: #C2506C;
+      --pink-soft: #FCEEF2;
+      --pink-mist: #FDF5F7;
+      --gold: #C9A15A;
+      --ink: #3A2A30;
+      --ink-soft: #7A6670;
+      --white: #FFFFFF;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; }
+    body {
+      font-family: 'Nunito', system-ui, sans-serif;
+      color: var(--ink);
+      background: radial-gradient(120% 80% at 50% 0%, #FFF 0%, var(--pink-soft) 55%, #F8DCE4 100%);
+      overflow-x: hidden;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* ---------- Stage 1: the wrapped gift ---------- */
+    .stage {
+      position: fixed; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 34px; padding: 24px;
+      transition: opacity .6s ease .9s, visibility 0s linear 1.5s;
+    }
+    .opened .stage { opacity: 0; visibility: hidden; pointer-events: none; }
+
+    .hint-top {
+      font-family: 'Great Vibes', cursive; font-size: clamp(34px, 9vw, 52px);
+      color: var(--pink-deep); text-align: center; line-height: 1.1;
+      animation: floaty 3s ease-in-out infinite;
+    }
+    .gift { position: relative; width: min(64vw, 260px); aspect-ratio: 1 / 1; cursor: pointer; border: 0; background: none; }
+    .gift:focus-visible { outline: 3px solid var(--pink-deep); outline-offset: 10px; border-radius: 16px; }
+    .wiggle { animation: wiggle 2.6s ease-in-out infinite; transform-origin: 50% 100%; }
+
+    .box {
+      position: absolute; left: 6%; right: 6%; bottom: 0; height: 66%;
+      background: linear-gradient(160deg, #F4A7BA 0%, var(--pink) 60%, var(--pink-deep) 100%);
+      border-radius: 10px 10px 16px 16px;
+      box-shadow: 0 18px 30px rgba(194, 80, 108, .28), inset 0 -10px 0 rgba(0,0,0,.06);
+    }
+    .lid {
+      position: absolute; left: 0; right: 0; top: 18%; height: 22%;
+      background: linear-gradient(160deg, #F7B3C4 0%, var(--pink) 70%);
+      border-radius: 12px;
+      box-shadow: 0 6px 12px rgba(194, 80, 108, .25);
+      transform-origin: 50% 100%;
+      transition: transform .9s cubic-bezier(.3,1.4,.5,1) .45s, opacity .5s ease 1s;
+      z-index: 2;
+    }
+    .ribbon-v { position: absolute; top: 0; bottom: 0; left: 50%; width: 15%; transform: translateX(-50%); background: linear-gradient(90deg, #FBE3EA, #FFF 50%, #FBE3EA); opacity: .95; }
+    .ribbon-h { position: absolute; left: 0; right: 0; top: 38%; height: 16%; background: linear-gradient(180deg, #FBE3EA, #FFF 50%, #FBE3EA); opacity: .95; }
+    .bow {
+      position: absolute; left: 50%; top: 2%; width: 74%; transform: translateX(-50%);
+      z-index: 3; filter: drop-shadow(0 4px 4px rgba(90,31,46,.25));
+      transition: transform .5s cubic-bezier(.6,-0.4,.7,.6), opacity .4s ease .25s;
+    }
+    .opened .bow { transform: translateX(-50%) scale(.2) rotate(-40deg); opacity: 0; }
+    .opened .lid { transform: translate(40%, -170%) rotate(28deg); opacity: 0; }
+    .opened .box { animation: boxDrop .8s ease .9s forwards; }
+
+    .tap {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-weight: 700; color: var(--pink-deep); font-size: 17px;
+      background: var(--white); padding: 12px 22px; border-radius: 999px;
+      box-shadow: 0 8px 22px rgba(194,80,108,.18);
+      animation: pulse 1.8s ease-in-out infinite;
+    }
+
+    /* ---------- Stage 2: the card ---------- */
+    .card-wrap {
+      min-height: 100%; display: flex; align-items: center; justify-content: center;
+      padding: max(28px, env(safe-area-inset-top)) 18px max(32px, env(safe-area-inset-bottom));
+      opacity: 0; visibility: hidden;
+    }
+    .opened .card-wrap { opacity: 1; visibility: visible; transition: opacity .8s ease 1.2s; }
+    .card {
+      position: relative; width: 100%; max-width: 440px;
+      background: linear-gradient(180deg, #FFFFFF 0%, var(--pink-mist) 100%);
+      border-radius: 28px; padding: 30px 24px 26px;
+      box-shadow: 0 30px 60px rgba(194,80,108,.22), 0 0 0 1px rgba(223,117,142,.18);
+      text-align: center; overflow: hidden;
+      transform: translateY(40px) scale(.96);
+    }
+    .opened .card { animation: cardIn 1s cubic-bezier(.2,.9,.3,1.2) 1.25s forwards; }
+    .card::before {
+      content: ''; position: absolute; inset: 10px; border-radius: 22px;
+      border: 1.5px dashed rgba(201,161,90,.45); pointer-events: none;
+    }
+    .logo { width: 108px; height: 108px; margin: 0 auto 6px; display: block; filter: drop-shadow(0 8px 14px rgba(120,80,30,.25)); }
+    h1 {
+      font-family: 'Great Vibes', cursive; font-weight: 400;
+      font-size: clamp(44px, 12vw, 60px); line-height: 1.05; color: var(--pink-deep);
+      margin: 4px 0 2px;
+    }
+    .sub { font-family: 'Cinzel', serif; font-weight: 700; letter-spacing: .14em; font-size: 13px; color: var(--gold); text-transform: uppercase; }
+    .divider { margin: 18px auto; width: 90px; height: 2px; background: linear-gradient(90deg, transparent, var(--pink), transparent); position: relative; }
+    .divider::after {
+      content: ''; position: absolute; left: 50%; top: 50%; width: 30px; height: 16px; transform: translate(-50%, -50%);
+      background: #FFF8FA url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23DF758E' d='M12 21s-7.5-4.6-10-9.3C.3 8.4 2 4.5 5.8 4.1 8.2 3.8 10.6 5.3 12 7.4c1.4-2.1 3.8-3.6 6.2-3.3 3.8.4 5.5 4.3 3.8 7.6C19.5 16.4 12 21 12 21z'/%3E%3C/svg%3E") center / 14px no-repeat;
+    }
+    .msg p { font-size: 16.5px; line-height: 1.65; color: var(--ink); margin: 0 0 14px; }
+    .msg p.soft { color: var(--ink-soft); }
+    .reveal { opacity: 0; transform: translateY(12px); }
+    .opened .reveal { animation: rise .8s ease forwards; }
+
+    .sign { font-family: 'Great Vibes', cursive; font-size: 40px; color: var(--pink-deep); margin: 6px 0 18px; }
+    .gift-box {
+      background: var(--white); border-radius: 20px; padding: 18px 16px;
+      box-shadow: 0 10px 24px rgba(194,80,108,.12), 0 0 0 1px rgba(223,117,142,.15);
+    }
+    .gift-box h2 { font-family: 'Cinzel', serif; font-size: 16px; color: var(--ink); letter-spacing: .04em; margin-bottom: 4px; }
+    .gift-box .small { font-size: 14px; color: var(--ink-soft); margin-bottom: 14px; }
+    .download {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 16px 18px; border-radius: 16px;
+      background: linear-gradient(135deg, #E8879E, var(--pink-deep));
+      color: var(--white); font-weight: 700; font-size: 17px; text-decoration: none;
+      box-shadow: 0 12px 22px rgba(194,80,108,.35);
+      transition: transform .15s ease;
+    }
+    .download:active { transform: scale(.97); }
+    .download svg { width: 22px; height: 22px; }
+    details.how { margin-top: 14px; text-align: left; font-size: 14px; color: var(--ink-soft); }
+    details.how summary { cursor: pointer; text-align: center; color: var(--pink-deep); font-weight: 700; list-style: none; }
+    details.how summary::-webkit-details-marker { display: none; }
+    details.how ol { margin: 10px 0 0 20px; line-height: 1.6; }
+    .footer { margin-top: 18px; font-size: 13px; color: var(--ink-soft); }
+    .mini-heart { width: 13px; height: 13px; vertical-align: -2px; }
+
+    /* ---------- Hearts & confetti ---------- */
+    .fx { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: 5; }
+    .piece { position: absolute; top: 0; will-change: transform; transform: translate3d(0, -12vh, 0); }
+    .heart { color: var(--pink); }
+
+    @keyframes floaty { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-6px) } }
+    @keyframes wiggle { 0%, 80%, 100% { transform: rotate(0) } 84% { transform: rotate(-4deg) } 88% { transform: rotate(4deg) } 92% { transform: rotate(-3deg) } 96% { transform: rotate(2deg) } }
+    @keyframes pulse { 0%,100% { transform: scale(1) } 50% { transform: scale(1.05) } }
+    @keyframes boxDrop { to { transform: translateY(30px) scale(.9); opacity: 0 } }
+    @keyframes cardIn { to { transform: translateY(0) scale(1) } }
+    @keyframes rise { to { opacity: 1; transform: translateY(0) } }
+    @keyframes fall {
+      from { transform: translate3d(0, -12vh, 0) rotate(0) }
+      to { transform: translate3d(var(--dx), 112vh, 0) rotate(var(--rot)) }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; transition-delay: 0s !important; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Wrapped gift -->
+  <section class="stage" aria-label="Regalo">
+    <p class="hint-top">Tengo algo para ti…</p>
+    <button class="gift wiggle" id="gift" aria-label="Abrir el regalo">
+      <div class="box">
+        <div class="ribbon-v"></div>
+        <div class="ribbon-h"></div>
+      </div>
+      <div class="lid"><div class="ribbon-v"></div></div>
+      <svg class="bow" viewBox="0 0 240 200" aria-hidden="true">
+        <defs>
+          <linearGradient id="bl" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFFFFF"/><stop offset="1" stop-color="#F6D5DE"/></linearGradient>
+          <linearGradient id="bt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F3C6D2"/><stop offset="1" stop-color="#FFFFFF"/></linearGradient>
+        </defs>
+        <path d="M110,100 C102,130 90,160 70,190 L90,182 L96,198 C112,168 120,134 126,104 Z" fill="url(#bt)" stroke="#E3A2B3" stroke-width="1.5"/>
+        <path d="M130,100 C138,130 150,160 170,190 L150,182 L144,198 C128,168 120,134 114,104 Z" fill="url(#bt)" stroke="#E3A2B3" stroke-width="1.5"/>
+        <path d="M120,88 C100,58 62,24 34,40 C8,56 12,108 42,120 C68,130 100,110 120,98 Z" fill="url(#bl)" stroke="#E3A2B3" stroke-width="2"/>
+        <path d="M120,88 C140,58 178,24 206,40 C232,56 228,108 198,120 C172,130 140,110 120,98 Z" fill="url(#bl)" stroke="#E3A2B3" stroke-width="2"/>
+        <path d="M116,91 C98,72 70,52 52,62 C38,70 40,96 56,104 C74,112 100,100 116,95 Z" fill="#E3A2B3" opacity=".35"/>
+        <path d="M124,91 C142,72 170,52 188,62 C202,70 200,96 184,104 C166,112 140,100 124,95 Z" fill="#E3A2B3" opacity=".35"/>
+        <rect x="105" y="76" width="30" height="32" rx="10" fill="#FBE3EA" stroke="#E3A2B3" stroke-width="2"/>
+        <path d="M110,84 C116,80 124,80 130,84" stroke="#FFF" stroke-width="3" fill="none" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <span class="tap">🎁 Toca para abrir</span>
+  </section>
+
+  <!-- Card -->
+  <main class="card-wrap">
+    <article class="card">
+      <img class="logo reveal" style="animation-delay:1.5s" src="logo.png" alt="Logo Ruby Castillo" />
+      <h1 class="reveal" style="animation-delay:1.7s">Feliz cumpleaños,<br />Mamá</h1>
+      <p class="sub reveal" style="animation-delay:1.9s">Mi reina · Mi ejemplo</p>
+      <div class="divider reveal" style="animation-delay:2s"></div>
+      <div class="msg">
+        <p class="reveal" style="animation-delay:2.2s">
+          A la mujer más fuerte, valiente y hermosa que conozco. Gracias por cada sacrificio, por cada abrazo
+          y por enseñarme con tu ejemplo que, con amor y trabajo, todo es posible.
+        </p>
+        <p class="reveal" style="animation-delay:2.5s">
+          Hoy celebro tu vida y todo lo que eres: una madre extraordinaria, una luchadora incansable
+          y el corazón de nuestra familia. Que este nuevo año te devuelva multiplicado todo el amor que das.
+        </p>
+        <p class="soft reveal" style="animation-delay:2.8s">
+          Te hice este detalle con mis propias manos: una app para tu salón, para que organices tus citas,
+          tus clientas y tus cuentas de forma fácil. Espero que la uses con mucho cariño y que te acompañe
+          cada día en lo que tanto amas hacer.
+        </p>
+      </div>
+      <p class="sign reveal" style="animation-delay:3.1s">Te amo, Steban</p>
+
+      <section class="gift-box reveal" style="animation-delay:3.4s" aria-labelledby="gift-title">
+        <h2 id="gift-title">Tu regalo: Ruby Castillo</h2>
+        <p class="small">Agenda, clientas y finanzas de tu salón, en tu celular.</p>
+        <a class="download" id="download"
+           href="https://github.com/Amilcar-Steban/feliz-cumple-mama/releases/latest/download/RubyCastillo.apk"
+           download="RubyCastillo.apk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+          Descargar mi regalo
+        </a>
+        <details class="how">
+          <summary>¿Cómo instalarla?</summary>
+          <ol>
+            <li>Toca <b>Descargar mi regalo</b> y espera a que termine.</li>
+            <li>Abre el archivo <b>RubyCastillo.apk</b> desde la notificación o desde <b>Descargas</b>.</li>
+            <li>Si el teléfono lo pide, permite <b>instalar apps de esta fuente</b>.</li>
+            <li>Toca <b>Instalar</b>, ábrela y entra con tu cuenta de Google. 💕</li>
+          </ol>
+        </details>
+      </section>
+      <p class="footer reveal" style="animation-delay:3.7s">Hecho con amor para ti <svg class="mini-heart" viewBox="0 0 24 24" aria-hidden="true"><path fill="#DF758E" d="M12 21s-7.5-4.6-10-9.3C.3 8.4 2 4.5 5.8 4.1 8.2 3.8 10.6 5.3 12 7.4c1.4-2.1 3.8-3.6 6.2-3.3 3.8.4 5.5 4.3 3.8 7.6C19.5 16.4 12 21 12 21z"/></svg></p>
+    </article>
+  </main>
+
+  <div class="fx" id="fx" aria-hidden="true"></div>
+
+  <script>
+    (function () {
+      var opened = false;
+      var gift = document.getElementById('gift');
+      var fx = document.getElementById('fx');
+      var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      function heartSvg(color) {
+        return '<svg viewBox="0 0 24 24" width="100%" height="100%"><path fill="' + color + '" d="M12 21s-7.5-4.6-10-9.3C.3 8.4 2 4.5 5.8 4.1 8.2 3.8 10.6 5.3 12 7.4c1.4-2.1 3.8-3.6 6.2-3.3 3.8.4 5.5 4.3 3.8 7.6C19.5 16.4 12 21 12 21z"/></svg>';
+      }
+
+      function burst() {
+        if (reduce) return;
+        var colors = ['#DF758E', '#F7B3C4', '#C9A15A', '#FFFFFF', '#C2506C'];
+        var count = window.innerWidth < 500 ? 50 : 90;
+        for (var i = 0; i < count; i++) {
+          var el = document.createElement('span');
+          var isHeart = i % 3 === 0;
+          el.className = 'piece' + (isHeart ? ' heart' : '');
+          if (isHeart) {
+            // Drawn heart: a text heart becomes a red emoji on Android
+            var size = 14 + Math.random() * 14;
+            el.innerHTML = heartSvg(['#DF758E', '#F4A7BA', '#C2506C'][i % 3]);
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+          } else {
+            el.style.width = (6 + Math.random() * 6) + 'px';
+            el.style.height = (10 + Math.random() * 8) + 'px';
+            el.style.background = colors[Math.floor(Math.random() * colors.length)];
+            el.style.borderRadius = '2px';
+          }
+          el.style.left = (Math.random() * 100) + 'vw';
+          el.style.setProperty('--dx', ((Math.random() - 0.5) * 160) + 'px');
+          el.style.setProperty('--rot', ((Math.random() - 0.5) * 900) + 'deg');
+          var duration = 2.8 + Math.random() * 2.4;
+          var delay = 0.6 + Math.random() * 1.2;
+          el.style.animation = 'fall ' + duration + 's cubic-bezier(.25,.6,.45,1) ' + delay + 's both';
+          fx.appendChild(el);
+          (function (node, ms) { setTimeout(function () { node.remove(); }, ms); })(el, (duration + delay) * 1000 + 200);
+        }
+      }
+
+      function open() {
+        if (opened) return;
+        opened = true;
+        gift.classList.remove('wiggle');
+        document.body.classList.add('opened');
+        if (navigator.vibrate) navigator.vibrate([30, 40, 30]);
+        burst();
+        setTimeout(burst, 2600);
+      }
+
+      gift.addEventListener('click', open);
+      document.querySelector('.tap').addEventListener('click', open);
+    })();
+  </script>
+</body>
+</html>
